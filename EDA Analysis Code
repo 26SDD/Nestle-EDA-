@@ -349,6 +349,35 @@ class Data_Base_Modelling():
 	    x = pd.DataFrame(x)
 	    return x
 
-
+    ##def variancechecker()
     
-# st.image(image, use_column_width=True)   
+1) Remove features with low -variance 
+
+The first feature elimination method which we could use is to remove features with low variance. 
+The thinking behind this is that features which have low variance, i.e. features which mostly remain at the same level across different observations, 
+should not ideally be responsible for differing responses in the observations.   
+
+Select X as the set of all features, and Y as the repsonse variable. Here, the response variable Y is class. 
+
+X = df_diabetes[['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age']]
+Y = df_diabetes['class']
+We now create a VarianceThreshold object of Sklearn, with a variance threshold of 0.3 (i.e. remove features with variance less than 30%). 
+Next we fit the VarianceThreshold object with the response variable X and the feature matrix Y.
+
+from sklearn.feature_selection import VarianceThreshold
+
+var = VarianceThreshold(threshold=0.3)
+var = var.fit(X,Y)
+With the .get_support method of sklearn classification objects we see that the feature with index 6 in the feature matrix has been eliminated. 
+
+cols = var.get_support(indices=True)
+cols
+#Output
+array([0, 1, 2, 3, 4, 5, 7], dtype=int64)
+If we now look at the feature names, we see that the feature "pedi" has been eliminated from the feature matrix.
+
+features = X.columns[cols]
+features
+#Output
+Index(['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'age'], dtype='object')
+    
