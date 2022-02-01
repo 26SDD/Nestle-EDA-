@@ -349,7 +349,84 @@ class Data_Base_Modelling():
 	    x = pd.DataFrame(x)
 	    return x
 
-    ##def variancechecker()
+#Dropping features with too much missing values
+    def drop_feat_with_to_many_nan(df, AT_LEAST_NON_MISSING_PERCENT = 0.7):
+    	   print ( "\nStart drop NaNs features function")
+    	   #AT_LEAST_NON_MISSING_PERCENT = 0.7  # require at most 30% missing values per feature
+           AT_LEAST_NON_MISSING = math.floor(AT_LEAST_NON_MISSING_PERCENT * len(df))
+           n_cols = len(df.columns)
+           df.dropna(axis=1, thresh=AT_LEAST_NON_MISSING, inplace=True)    
+    
+           print("{} features dropped dut to high NaN's proportion".format(n_cols - len(df.columns)))
+           print("{} features in data-set after NaN's drop.".format(df.shape[1]))
+           return df
+	   
+    #Dropping features with low variance
+
+	   
+    def drop_feat_with_low_var(df, CENTERED_PERCENT=0.8, LOW_VAR_VAL=0.2):
+	    print ( "\nStart drop low var features function")
+	    features_list = df.columns.tolist()
+	    features_list.remove('Diagnosis')
+
+	    low_var_features_list = []
+	    categorical_features_list = []
+	    numerical_features_list = []
+
+	    #dividing the features into categorical and numerical
+	    for ftr in features_list:
+		if df[ftr].nunique()<=20:
+		    categorical_features_list.append(ftr)
+		else:
+		    numerical_features_list.append(ftr)
+
+	    #categorical features with low variance
+	    for ftr in categorical_features_list:
+		if df[ftr].value_counts(normalize = True).max() >= CENTERED_PERCENT:
+		    low_var_features_list.append(ftr)
+
+	    #numerical features with low variance
+	    for ftr in numerical_features_list:
+		if df[ftr].var() <= LOW_VAR_VAL:
+		    low_var_features_list.append(ftr)          
+
+	    df.drop(low_var_features_list,axis=1,inplace=True)
+
+	    print("{} features dropped due to low variance".format(len(low_var_features_list)))
+	    print("{} features in data-set after low var drop".format(df.shape[1]))
+	    return df
+	    
+   #Dropping features that are highly correlared
+
+def drop_high_corr_feat(df, HIGH_CORR_VAL=0.9):
+    print ( "\nStart drop correlated features function")
+    features_list = df.columns.tolist()
+    features_list.remove('Diagnosis')
+
+    new_ftr_list = []
+    rmv_list = []
+    corr_ftr_dict = {}
+
+    for ftr in features_list:
+        if ftr in rmv_list:
+            continue
+        else:
+            new_ftr_list.append(ftr)
+        for j in features_list:
+            if j in new_ftr_list:
+                continue
+            if j in rmv_list:
+                continue
+            if abs(df[[ftr, j]].corr().iloc[0,1]) >= HIGH_CORR_VAL:
+                rmv_list.append(j)
+                corr_ftr_dict[ftr] = j
+            
+    df.drop(rmv_list,axis=1,inplace=True)
+    
+    print("{} features dropped due to high correlation".format(len(rmv_list)))
+    print("{} features in data-set after correlation drop".format(df.shape[1]))
+    return df
+	
     
 1) Remove features with low -variance 
 
