@@ -457,4 +457,3 @@ features = X.columns[cols]
 features
 #Output
 Index(['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'age'], dtype='object')
-    
