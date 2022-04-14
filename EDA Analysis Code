@@ -30,7 +30,7 @@ from PIL import Image
 # image = Image.open('cover.jpg')
 matplotlib.use("Agg")
 
-
+ 
 class DataFrame_Loader():
 
     
