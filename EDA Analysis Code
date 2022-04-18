@@ -42,7 +42,7 @@ class DataFrame_Loader():
         self.df = pd.read_csv(data)
         return self.df
 
-class EDA_Dataframe_Analysis():
+class EDA_Dataframe_Analysis(): 
 
     
     def __init__(self):
