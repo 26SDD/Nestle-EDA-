@@ -223,7 +223,7 @@ class EDA_Dataframe_Analysis():
     def check_cat_relation(self,x,y,confidence_interval):
 	    cross_table = pd.crosstab(x,y,margins=True)
 	    stat,p,dof,expected = chi2_contingency(cross_table)
-	    print("Chi_Square Value = {0}".format(stat))
+	    print("Chi_Square Value = {0}".format(stat)) 
 	    print("P-Value = {0}".format(p))
 	    alpha = 1 - confidence_interval
 	    return p,alpha
