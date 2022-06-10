@@ -69,7 +69,7 @@ class EDA_Dataframe_Analysis():
 	    return x.isna().sum()
 
 
-    def show_hist(self,x):
+    def show_hist(self,x): 
     	return x.hist()
 
 
